@@ -25,6 +25,16 @@ commands:
             npm install
             npm run build
             npm run migrations:revert
+  notify_slack_error:
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+  notify_slack_pass:
+    steps:
+      - slack/notify:
+          event: pass
+          template: basic_success_1
 
 docker_image1: &node_image
   docker:
@@ -81,7 +91,6 @@ jobs:
             cd frontend
             npm install
             npm run build
-
   test-backend:
     <<: *node_image
     steps:
@@ -94,7 +103,6 @@ jobs:
             cd backend
             npm install
             npm run build
-
   scan-frontend:
     <<: *node_image
     steps:
@@ -108,7 +116,6 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm update js-yaml --depth 4
-
   scan-backend:
     <<: *node_image
     steps:
@@ -123,7 +130,9 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix
             npm update path-parse --depth 3
-
+      - notify_slack_error
+      - notify_slack_pass
+      
   deploy-infrastructure:
     <<: *aws_image
     steps:
