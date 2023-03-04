@@ -9,7 +9,7 @@
   become: true
   apt:
     autoremove: true
-- name: install dependencies
+- name: install deps
   become: true
   apt:
     name: ['nodejs', 'npm']
