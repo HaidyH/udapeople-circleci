@@ -123,8 +123,6 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix
             npm update path-parse --depth 3
-      - notify_slack_error
-      - notify_slack_pass
 
   deploy-infrastructure:
     <<: *aws_image
